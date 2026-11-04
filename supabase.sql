@@ -1,5 +1,4 @@
 -- Supabase > SQL Editor'a yapıştırıp çalıştır.
--- 'SENIN_EPOSTAN@ornek.com' yerine yönetici hesabının e-postasını yaz.
 
 create table if not exists public.events (
   id         bigint generated always as identity primary key,
@@ -19,7 +18,7 @@ create or replace function public.is_artea_admin()
 returns boolean
 language sql stable
 as $$
-  select coalesce(auth.jwt() ->> 'email', '') = 'SENIN_EPOSTAN@ornek.com'
+  select coalesce(auth.jwt() ->> 'email', '') = 'kursatbulut477@gmail.com'
 $$;
 
 -- Herkes okuyabilir
