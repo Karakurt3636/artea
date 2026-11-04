@@ -48,6 +48,7 @@ button{font:inherit;cursor:pointer}
 .day.we{background:#fbf6ec}
 .num{font-size:13px;font-weight:700;width:24px;height:24px;border-radius:50%;display:grid;place-items:center}
 .chip{font-size:11px;line-height:1.25;border-radius:6px;padding:2px 5px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.chips{display:contents}
 .more{font-size:11px;color:var(--muted)}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;position:sticky;top:12px}
 .panel h3{font-family:'Fraunces',serif;margin:0 0 2px;font-size:22px}
@@ -76,7 +77,9 @@ textarea{resize:vertical;min-height:70px}
   .layout{grid-template-columns:1fr}
   .panel{position:static}
   .day{min-height:64px;padding:4px}
-  .chip{font-size:0;height:6px;padding:0;border-radius:3px}
+  .chips{display:flex;gap:3px;flex-wrap:wrap}
+  .chip{font-size:0;width:10px;height:10px;padding:0;border-radius:50%}
+  .day.has{background:var(--accent-soft);border-color:var(--accent)}
   .mtitle{font-size:28px}
 }
 </style>
@@ -193,10 +196,10 @@ function renderGrid(){
     const items=(events[k]||[]).slice().sort((a,b)=>(a.time||'99').localeCompare(b.time||'99'));
     const chips=items.slice(0,3).map(e=>`<span class="chip" style="background:${catColor(e.cat)}">${e.time?esc(e.time)+' ':''}${esc(e.t)}</span>`).join('');
     const more=items.length>3?`<span class="more">+${items.length-3} daha</span>`:'';
-    h+=`<button class="day ${k===tk?'today':''} ${k===sel?'sel':''} ${wd>=5?'we':''}" data-k="${k}"><span class="num">${d}</span>${chips}${more}</button>`;
+    h+=`<button class="day ${k===tk?'today':''} ${k===sel?'sel':''} ${wd>=5?'we':''} ${items.length?'has':''}" data-k="${k}"><span class="num">${d}</span><span class="chips">${chips}</span>${more}</button>`;
   }
   $('grid').innerHTML=h;
-  $('grid').querySelectorAll('.day[data-k]').forEach(b=>b.onclick=()=>{sel=b.dataset.k;renderGrid();renderPanel()});
+  $('grid').querySelectorAll('.day[data-k]').forEach(b=>b.onclick=()=>{sel=b.dataset.k;renderGrid();renderPanel();if(window.innerWidth<=860)$('panel').scrollIntoView({behavior:'smooth',block:'start'})});
 }
 function fmtLong(k){
   const [y,m,d]=k.split('-').map(Number);
